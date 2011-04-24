@@ -1,0 +1,15 @@
+name: TimePorts
+main: net.gamesketch.bukkit.timeports.TimePortsCore
+version: 0.0.1
+website: http://www.gamesketch.net
+author: The GameSketch Community
+description: >
+             Fine grained teleportation links between signs.
+commands:
+  timeport:
+    description: test
+    usage: |
+           /<command> <add/remove/edit> <name> parameters
+           /<command> add <name> <speed>
+           /<command> remove <name>
+           /<command> edit <name> (midpos/endpos/bounds/name/speed)
