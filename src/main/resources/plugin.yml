@@ -13,3 +13,4 @@ commands:
            /<command> add <name> <speed>
            /<command> remove <name>
            /<command> edit <name> (midpos/endpos/bounds/name/speed)
+           /<command> sel (1/2)

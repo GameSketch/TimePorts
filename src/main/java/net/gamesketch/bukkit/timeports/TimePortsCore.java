@@ -3,6 +3,7 @@ package net.gamesketch.bukkit.timeports;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -16,10 +17,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 //TODO
 //-fix all the nullpointers
-//---selecting tools
-//---using add/remove
 //
 //-make a data saver/loader with proper worlds (multiworlds support)
+// Probably this format: (it needs world/yaw support:
+//
+// name:speed:world:x;y;z:x;y;z:x1;y1;z1;world1;yaw1:x2;y2;z2;world2;yaw2
+//
+//-Make an isInTeleporter();
 //
 //-more required stuff
 
@@ -43,9 +47,14 @@ public class TimePortsCore extends JavaPlugin {
         pdata = new LinkedList<PlayerData>();
         teleports = new LinkedList<Teleporter>();
         
+        for (Player p : getServer().getOnlinePlayers()) {
+        	pdata.add(new PlayerData(p));
+        }
         
         pm.registerEvent(Event.Type.PLAYER_INTERACT, TimePortsPListener, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.PLAYER_MOVE, TimePortsPListener, Event.Priority.Normal, this);
+        pm.registerEvent(Event.Type.PLAYER_JOIN, TimePortsPListener, Event.Priority.Normal, this);
+        pm.registerEvent(Event.Type.PLAYER_QUIT, TimePortsPListener, Event.Priority.Normal, this);
         
         
         System.out.println( pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!" );
@@ -73,10 +82,11 @@ public class TimePortsCore extends JavaPlugin {
         		if (pos == null) { return false; }
         		Block pos1 = pos.getPos1();
         		Block pos2 = pos.getPos2();
-        		if (pos1 == null || pos2 == null) { player.sendMessage("Define the area using Iron_Chestplate first."); }
+        		if (pos1 == null || pos2 == null) { player.sendMessage("Define the area using para's 'add <1/2>' first."); return true; }
         		Teleporter teleporter = new Teleporter(pos1.getLocation(),pos2.getLocation(),name);
         		teleporter.setSpeed(speed);
         		teleports.add(teleporter);
+        		player.sendMessage(ChatColor.AQUA + "Teleporter created, define midpoints now");
         		return true;
         		
         		
@@ -130,6 +140,24 @@ public class TimePortsCore extends JavaPlugin {
         		
     			teleports.remove(tp);
     			player.sendMessage("Teleporter " + args[1] + "succesfully removed");
+    			return true;
+        	}
+        	if (args[0].equals("sel")) {
+        		if (args.length <= 1) { return false; }
+        		if (args[1] == null) { return false; }
+        		if (args[1].equals("1")) { getPlayerData(player.getName()).setPos1(player.getLocation().getBlock()); 
+        		player.sendMessage(ChatColor.AQUA + "Selected pos 1 at your position"); return true; }
+        		if (args[1].equals("2")) { getPlayerData(player.getName()).setPos2(player.getLocation().getBlock()); 
+        		player.sendMessage(ChatColor.AQUA + "Selected pos 2 at your position"); return true; }
+        		return false;
+        	}
+        	if (args[0].equals("list")) {
+        		if (teleports.isEmpty()) { return true; }
+        		StringBuilder build = new StringBuilder();
+        		for (Teleporter t : teleports) {
+        			build.append(t.getName()).append(" ");
+        		}
+        		player.sendMessage(build.substring(0,build.length() - 1));
         	}
         }
         return true;
