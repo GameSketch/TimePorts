@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -22,8 +23,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 // Probably this format: (it needs world/yaw support:
 //
 // name:speed:world:x;y;z:x;y;z:x1;y1;z1;world1;yaw1:x2;y2;z2;world2;yaw2
-//
-//-Make an isInTeleporter();
 //
 //-more required stuff
 
@@ -174,6 +173,30 @@ public class TimePortsCore extends JavaPlugin {
     public static Teleporter getTeleporter(String s) {
     	for (Teleporter t : teleports) {
     		if (t.getName().equals(s)) { return t; }
+    	}
+    	return null;
+    }
+    public static Teleporter isInTeleporter(Player p) {
+    	for (Teleporter t : teleports) {
+    		Location ploc = p.getLocation();
+    		boolean isX = false, isY = false, isZ = false;
+    		int px = ploc.getBlockX(), tx1 = t.getX1(), tx2 = t.getX2();
+    		int py = ploc.getBlockY(), ty1 = t.getY1(), ty2 = t.getY2();
+    		int pz = ploc.getBlockZ(), tz1 = t.getZ1(), tz2 = t.getZ2();
+    		
+    		if (tx1 <= tx2) { if (px >= tx1 && px <= tx2) { isX = true; } }
+    		if (tx1 >= tx2) { if (px >= tx2 && px <= tx1) { isX = true; } }
+    		
+    		if (ty1 <= ty2) { if (py >= ty1 && py <= ty2) { isY = true; } }
+    		if (ty1 >= ty2) { if (py >= ty2 && py <= ty1) { isY = true; } }
+    		
+    		if (tz1 <= tz2) { if (pz >= tz1 && pz <= tz2) { isZ = true; } }
+    		if (tz1 >= tz2) { if (pz >= tz2 && pz <= tz1) { isZ = true; } }
+    		
+    		if (isX && isY && isZ) { return t; }
+    		else { continue; }
+    		
+    		
     	}
     	return null;
     }
