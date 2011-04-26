@@ -37,6 +37,19 @@ public class Teleporter {
 		this.world = loc1.getWorld();
 		this.name = name;
 	}
+	public Teleporter(String name, int speed, int x1, int y1, int z1, int x2, int y2, int z2, World world, Location middle, Location end) {
+		this.name = name;
+		this.speed = speed;
+		this.x1 = x1;
+		this.y1 = y1;
+		this.z1 = z1;
+		this.x2 = x2;
+		this.y2 = y2;
+		this.z2 = z2;
+		this.world = world;
+		this.destinymiddle = middle;
+		this.destinyend = end;
+	}
 	/*
 	 * Value getters
 	 */
