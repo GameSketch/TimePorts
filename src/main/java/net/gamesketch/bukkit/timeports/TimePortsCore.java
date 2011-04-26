@@ -17,14 +17,12 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 //TODO
-//-fix all the nullpointers
 //
-//-make a data saver/loader with proper worlds (multiworlds support)
-// Probably this format: (it needs world/yaw support:
+//-make a /depart command
+//-make an Teleporter.teleport(Player)
+//-make an Teleporter.getTime()
 //
-// name:speed:world:x;y;z:x;y;z:x1;y1;z1;world1;yaw1:x2;y2;z2;world2;yaw2
-//
-//-more required stuff
+//Fix any major bugs, try to spot small bugs
 
 public class TimePortsCore extends JavaPlugin {
 	PlayerListener TimePortsPListener = new TimePortsPListener();
@@ -100,17 +98,17 @@ public class TimePortsCore extends JavaPlugin {
     			Teleporter tp = getTeleporter(args[1]);
     			if (tp == null) { player.sendMessage("No Timeport found with that name."); return false; }
         		
-        		if (args[2] == "midpos") { //edit <name> midpos
+        		if (args[2].equals("midpos")) { //edit <name> midpos
         			tp.setDestinationMiddle(player.getLocation());
         			player.sendMessage("Done.");
         			return true;
         		}
-        		if (args[2] == "endpos") { //edit <name> endpos
+        		if (args[2].equals("endpos")) { //edit <name> endpos
         			tp.setDestinationEnd(player.getLocation());
         			player.sendMessage("Done.");
         			return true;
         		}
-        		if (args[2] == "bounds") { //edit <name> bounds
+        		if (args[2].equals("bounds")) { //edit <name> bounds
             		Block pos1 = getPlayerData(player.getName()).getPos1();
             		Block pos2 = getPlayerData(player.getName()).getPos2();
             		if (pos1 == null || pos2 == null) { player.sendMessage("Define the area using Iron_Chestplate first."); }
@@ -121,17 +119,18 @@ public class TimePortsCore extends JavaPlugin {
             		return true;
         		}
         		
-        		if (args[2] == "name") { //edit <name> name <newname>
+        		if (args[2].equals("name")) { //edit <name> name <newname>
         			tp.setName(args[3]);
         			player.sendMessage("Done.");
         			return true;
         		}
-        		if (args[2] == "speed") { //edit <name> speed <newspeed>
+        		if (args[2].equals("speed")) { //edit <name> speed <newspeed>
         			try { tp.setSpeed(Integer.parseInt(args[3])); }
         			catch (NumberFormatException e) { return false; }
         			player.sendMessage("Done.");
         			return true;
         		}
+        		return false;
         		
         	}
         	if (args[0].equals("remove")) {

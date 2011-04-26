@@ -1,7 +1,11 @@
 package net.gamesketch.bukkit.timeports;
 
+import java.util.Timer;
+
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 public class Teleporter {
 	//zone markers
@@ -18,6 +22,10 @@ public class Teleporter {
 	Location destinyend;
 	Location destinymiddle;
 	double speed;
+	
+	//timer
+	Timer midtimer = new Timer();
+	Timer endtimer = new Timer();
 	
 	
 	
@@ -121,6 +129,26 @@ public class Teleporter {
 	}
 	public void setName(String s) {
 		this.name = s;
+	}
+	
+	public long getTime() {
+		if (destinymiddle != null && destinyend != null && speed != 0) {
+			Vector v1 = destinymiddle.toVector();
+			Vector v2 = destinyend.toVector();
+			double distance = v1.distance(v2);
+			long time = (int)distance / (int)speed * 1000;
+			return time;
+		}
+		return -1;
+	}
+	public boolean teleport(Player p) {
+		//TODO check if teleporter is valid (all locations)
+		//TODO add timers for teleporting
+		//TODO use getTime for milliseconds
+		
+		//note: start = 10000
+		//note: mid-air = getTime + 10000
+		return false;
 	}
 	
 }

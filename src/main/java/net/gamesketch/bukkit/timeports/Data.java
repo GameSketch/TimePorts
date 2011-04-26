@@ -31,9 +31,10 @@ public class Data {
 				if (s.split(":").length <= 6) { continue; }
 				TimePortsCore.teleports.add(StringToData(s));
 			}
+			in.close();
 			
 		} catch (IOException e) { System.out.println("Unhandled exception IOException in Data.Load()"); e.printStackTrace(); }
-		System.out.println("[TimePort] Loaded " + TimePortsCore.teleports.size() + "teleporters.");
+		System.out.println("[TimePort] Loaded " + TimePortsCore.teleports.size() + " teleporters.");
 	}
 	public static void Save() {
 		if (!file.exists()) {
@@ -42,15 +43,19 @@ public class Data {
 				file.createNewFile();
 			} catch (IOException e) { System.out.println("Unable to create new file"); e.printStackTrace(); }
 		}
+		int total = 0;
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter(file));
 			for (Teleporter t : TimePortsCore.teleports) {
 				try {
 					out.write(dataToString(t));
 					out.newLine();
+					total++;
 				} catch (IOException e) { }
 			}
+			out.close();
 		} catch (IOException e) { System.out.println("Unhandled exception IOException in Data.Save()"); e.printStackTrace(); }
+		System.out.println("[TimePort] Saved " + total + " teleporters");
 	}
 	
 	private static String dataToString(Teleporter t) {
@@ -68,17 +73,17 @@ public class Data {
 		s.append(t.getY2()).append(";");                			//y; <> pos2
 		s.append(t.getZ2()).append(":");                			//z: /
 		
-		s.append(t.getPoint1().getX()).append(";");     			//x1;
-		s.append(t.getPoint1().getY()).append(";");     			//y1;
-		s.append(t.getPoint1().getZ()).append(";");     			//z1;
+		s.append((int)t.getPoint1().getX()).append(";");     		//x1;
+		s.append((int)t.getPoint1().getY()).append(";");     		//y1;
+		s.append((int)t.getPoint1().getZ()).append(";");     		//z1;
 		s.append(t.getPoint1().getWorld().getName()).append(";");   //world1;
-		s.append((int)t.getPoint1().getYaw()).append(":");     			//yaw1;
+		s.append((int)t.getPoint1().getYaw()).append(":");     		//yaw1;
 		
-		s.append(t.getPoint2().getX()).append(";");     			//x2;
-		s.append(t.getPoint2().getY()).append(";");     			//y2;
-		s.append(t.getPoint2().getZ()).append(";");     			//z2;
+		s.append((int)t.getPoint2().getX()).append(";");     		//x2;
+		s.append((int)t.getPoint2().getY()).append(";");     		//y2;
+		s.append((int)t.getPoint2().getZ()).append(";");     		//z2;
 		s.append(t.getPoint2().getWorld().getName()).append(";");   //world2;
-		s.append((int)t.getPoint2().getYaw());     						//yaw2;
+		s.append((int)t.getPoint2().getYaw());     					//yaw2;
 		
 		
 		
