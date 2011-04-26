@@ -1,15 +1,56 @@
 package net.gamesketch.bukkit.timeports;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import org.bukkit.Location;
 import org.bukkit.World;
 
 public class Data {
+	static File file = new File("plugins/TimePort/data");
+	static File folder = new File("plugins/TimePort/");
+	
+	
+	public static void Load() {
+		TimePortsCore.teleports.clear();
+		if (!file.exists()) {
+			folder.mkdirs();
+			try { file.createNewFile(); }
+			catch (IOException e) { return; }
+			return;
+		}
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(file));
+			String s;
 
-	public void Load() {
-		//TODO make loader
+			while ((s = in.readLine()) != null) {
+				if (s.split(":").length <= 6) { continue; }
+				TimePortsCore.teleports.add(StringToData(s));
+			}
+			
+		} catch (IOException e) { System.out.println("Unhandled exception IOException in Data.Load()"); e.printStackTrace(); }
+		System.out.println("[TimePort] Loaded " + TimePortsCore.teleports.size() + "teleporters.");
 	}
-	public void Save() {
-		//TODO make saver
+	public static void Save() {
+		if (!file.exists()) {
+			try {
+				folder.mkdirs();
+				file.createNewFile();
+			} catch (IOException e) { System.out.println("Unable to create new file"); e.printStackTrace(); }
+		}
+		try {
+			BufferedWriter out = new BufferedWriter(new FileWriter(file));
+			for (Teleporter t : TimePortsCore.teleports) {
+				try {
+					out.write(dataToString(t));
+					out.newLine();
+				} catch (IOException e) { }
+			}
+		} catch (IOException e) { System.out.println("Unhandled exception IOException in Data.Save()"); e.printStackTrace(); }
 	}
 	
 	private static String dataToString(Teleporter t) {

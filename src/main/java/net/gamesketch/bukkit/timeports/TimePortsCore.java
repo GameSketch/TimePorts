@@ -35,7 +35,7 @@ public class TimePortsCore extends JavaPlugin {
 	
     public void onDisable() {
         //PluginManager pm = getServer().getPluginManager();
-    	//Data.Save();
+    	Data.Save();
     }
 
     public void onEnable() {
@@ -51,7 +51,7 @@ public class TimePortsCore extends JavaPlugin {
         	pdata.add(new PlayerData(p));
         }
         
-        //Data.Load();
+        Data.Load();
         
         pm.registerEvent(Event.Type.PLAYER_INTERACT, TimePortsPListener, Event.Priority.Normal, this);
         pm.registerEvent(Event.Type.PLAYER_MOVE, TimePortsPListener, Event.Priority.Normal, this);
